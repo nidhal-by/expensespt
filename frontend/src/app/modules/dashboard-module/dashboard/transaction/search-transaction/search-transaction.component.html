@@ -1,0 +1,61 @@
+<div>
+  <h1>Chercher mes transactions par période</h1>
+  <nb-card class="mt-2">
+    <nb-card-body>
+      <div class="flex items-center justify-between">
+        <div class="flex gap-4">
+          <div class="flex gap-2 my-2 justify-between items-center">
+            <label class="mr-2" for="beginDate">Date de début:</label>
+            <input
+              nbInput
+              id="beginDate"
+              name="beginDate"
+              [nbDatepicker]="beginDatepicker"
+              [(ngModel)]="startDate"
+            />
+            <nb-datepicker
+              #beginDatepicker
+              format="dd MMM yyyy"
+            ></nb-datepicker>
+          </div>
+          <div class="flex gap-2 my-2 justify-between items-center">
+            <label class="search-label mr-2" for="endDate">Date de fin:</label>
+            <input
+              nbInput
+              id="endDate"
+              name="endDate"
+              [(ngModel)]="endDate"
+              [nbDatepicker]="endDatepicker"
+            />
+            <nb-datepicker #endDatepicker format="dd MMM yyyy"></nb-datepicker>
+          </div>
+          <button
+            nbButton
+            status="primary"
+            class="my-2"
+            (click)="searchTransactions()"
+          >
+            Chercher
+          </button>
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+  <nb-card
+    class="mt-5"
+    [nbSpinner]="loading"
+    nbSpinnerStatus="danger"
+    nbSpinnerSize="large"
+    nbSpinnerMessage="Chargement"
+  >
+    <nb-card-body>
+      <app-transaction-table
+        *ngIf="allTransactions.length > 0"
+        [dataSource]="dataSource"
+        [allColumns]="allColumns"
+        [columnsInfos]="columnsInfos"
+      />
+      <p *ngIf="allTransactions.length === 0">Aucun résultat</p>
+    </nb-card-body>
+  </nb-card>
+</div>

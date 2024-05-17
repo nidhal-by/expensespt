@@ -1,0 +1,86 @@
+<table [nbTreeGrid]="dataSource" [nbSort]="dataSource" class="mt-3">
+  <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allColumns"></tr>
+  <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: allColumns"></tr>
+
+  <ng-container
+    *ngFor="let column of columnsInfos"
+    [nbTreeGridColumnDef]="column.name"
+  >
+    <th
+      nbTreeGridHeaderCell
+      [nbSortHeader]="getSortDirection(column.name)"
+      *nbTreeGridHeaderCellDef
+    >
+      {{ column.label | titlecase }}
+    </th>
+    <td nbTreeGridCell *nbTreeGridCellDef="let row">
+      <div *ngIf="column.name !== 'category'; else category_template">
+        <span
+          [ngClass]="{
+            'text-red-600':
+              ['type', 'amount'].includes(column.name) &&
+              row.data.type === transactionsTypes.EXPENSE,
+            'text-green-800':
+              ['type', 'amount'].includes(column.name) &&
+              row.data.type === transactionsTypes.INCOME
+          }"
+          *ngIf="column.name !== 'action'"
+        >
+          {{ row.data[column.name] || "-" }}
+        </span>
+        <button
+          *ngIf="column.name === 'action'"
+          nbButton
+          (click)="openDeleteConfirmation(dialog, row.data.id)"
+          size="small"
+          status="danger"
+        >
+          Supprimer
+        </button>
+      </div>
+
+      <ng-template #category_template>
+        <div class="flex gap-2">
+          <svg-icon
+            class="rounded-full p-0.5"
+            [ngStyle]="{ 'background-color': row.data.category.color }"
+            [key]="row.data.category.icon"
+            color="white"
+            size="lg"
+            *ngIf="row.data.category.default"
+          ></svg-icon>
+          <nb-icon
+            class="rounded-full p-0.5"
+            [ngStyle]="{ 'background-color': row.data.category.color }"
+            *ngIf="!row.data.category.default"
+            [icon]="row.data.category.icon"
+            status="control"
+          ></nb-icon>
+          {{ row.data.category.name }}
+        </div>
+      </ng-template>
+    </td>
+  </ng-container>
+</table>
+
+<ng-template #dialog let-data let-ref="dialogRef">
+  <nb-card>
+    <nb-card-header>Confirmation de suppression</nb-card-header>
+    <nb-card-body>
+      {{ data.message }}
+    </nb-card-body>
+    <nb-card-footer>
+      <button
+        nbButton
+        (click)="confirmDeletion(data.id, ref)"
+        status="success"
+        class="mr-4"
+      >
+        Confirmer
+      </button>
+      <button nbButton (click)="ref.close()" status="danger" class="mr-4">
+        Annuler
+      </button>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>

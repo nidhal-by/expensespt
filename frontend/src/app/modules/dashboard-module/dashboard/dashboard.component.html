@@ -1,0 +1,21 @@
+<nb-layout>
+  <nb-layout-header id="app-header">
+    <img src="/assets/images/budget-planning-logo.png" class="h-16" />
+    <app-header></app-header>
+  </nb-layout-header>
+
+  <nb-sidebar tag="left">
+    <app-sidebar-menu></app-sidebar-menu>
+  </nb-sidebar>
+
+  <nb-layout-column class="relative !pt-10">
+    <nb-icon
+      (click)="toggleSidebar()"
+      [icon]="
+        sideBarShown ? 'arrowhead-left-outline' : 'arrowhead-right-outline'
+      "
+      class="absolute top-2 left-2 p-0 cursor-pointer"
+    ></nb-icon>
+    <router-outlet></router-outlet>
+  </nb-layout-column>
+</nb-layout>

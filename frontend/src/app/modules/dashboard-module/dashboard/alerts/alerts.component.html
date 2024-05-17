@@ -1,0 +1,27 @@
+<div>
+  <h1>Mes alertes</h1>
+  <div class="max-w-xl pt-3">
+    <form>
+      <div
+        *ngFor="let category of categories"
+        class="flex mb-4 justify-between"
+      >
+        <label class="flex align items-center">
+          <span
+            class="rounded-full h-8 w-8 inline-block mr-2 p-1.5"
+            [ngStyle]="{ 'background-color': category.color }"
+          >
+            <svg-icon [key]="category.icon" color="white" size="lg" *ngIf="category.default"></svg-icon>
+            <nb-icon *ngIf="!category.default" [icon]="category.icon" status="control"></nb-icon>
+          </span>
+          <span class="font-semibold">{{ category.name }}:</span>
+        </label>
+        <nb-toggle
+          [(ngModel)]="category.enabled"
+          [name]="category.id"
+          (checkedChange)="alertChanged($event, category.id, category.name)"
+        ></nb-toggle>
+      </div>
+    </form>
+  </div>
+</div>

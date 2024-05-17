@@ -1,0 +1,25 @@
+/* You can add global styles to this file, and also import other style files */
+@use 'themes' as *;
+
+// Nebular
+@use '@nebular/theme/styles/globals' as *;
+@use '@nebular/auth/styles/globals' as *;
+
+@include nb-install() {
+  @include nb-theme-global();
+  @include nb-auth-global();
+} ;
+
+// TailwindCss
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+h1.dashboard-title {
+  @apply text-2xl font-light;
+}
+
+.nb-theme-default .nb-tree-grid-header-cell, .nb-theme-default .nb-tree-grid-cell, .nb-theme-default .nb-tree-grid-footer-cell {
+  border-color: #a6a6a6; /* Customize the border color */
+}

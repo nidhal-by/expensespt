@@ -1,0 +1,137 @@
+<div>
+  <h1>Ajouter une transaction</h1>
+  <div class="max-w-xl">
+    <nb-card class="mt-2">
+      <nb-card-body>
+        <form>
+          <div class="flex gap-2 my-2 justify-between items-center">
+            <label> Type de transaction: </label>
+            <nb-select
+              [(selected)]="transaction.type"
+              hero
+              [status]="
+                transaction.type === transactionExpense ? 'danger' : 'success'
+              "
+            >
+              <nb-option [value]="transactionExpense">
+                {{ transactionTypes[transactionExpense] }}
+              </nb-option>
+              <nb-option [value]="transactionIncome">
+                {{ transactionTypes[transactionIncome] }}
+              </nb-option>
+            </nb-select>
+          </div>
+
+          <div class="flex gap-2 my-2 justify-between items-center">
+            <label> Montant de la transaction: </label>
+            <input
+              [(ngModel)]="transaction.amount"
+              nbInput
+              placeholder="Montant"
+              name="amount"
+            />
+          </div>
+
+          <div class="flex gap-2 my-2 justify-between items-center">
+            <label> Date de transaction </label>
+            <input
+              nbInput
+              placeholder="Date"
+              [nbDatepicker]="datepicker"
+              [(ngModel)]="transaction.date"
+              name="date"
+            />
+          </div>
+          <nb-datepicker #datepicker format="dd MMM yyyy"></nb-datepicker>
+
+          <div class="flex gap-2 my-2 justify-between items-center">
+            <label> Note de transaction </label>
+            <textarea
+              nbInput
+              placeholder="Description"
+              [(ngModel)]="transaction.description"
+              name="description"
+            >
+            </textarea>
+          </div>
+
+          <div class="flex gap-2 my-2 justify-between items-center">
+            <label> Catégorie de transaction </label>
+            <nb-select [(selected)]="transaction.category" hero>
+              <nb-option
+                *ngFor="let category of categories"
+                [value]="category.id"
+              >
+                <div class="flex gap-2">
+                  <svg-icon
+                    *ngIf="category.default"
+                    class="rounded-full p-0.5"
+                    [ngStyle]="{ 'background-color': category.color }"
+                    [key]="category.icon"
+                    color="white"
+                    size="lg"
+                  ></svg-icon>
+                  <nb-icon
+                    *ngIf="!category.default"
+                    class="rounded-full p-0.5"
+                    [ngStyle]="{ 'background-color': category.color }"
+                    [icon]="category.icon"
+                    status="control"
+                  ></nb-icon>
+                  <span>{{ category.name }}</span>
+                </div>
+              </nb-option>
+            </nb-select>
+          </div>
+          <div class="flex gap-2 my-2 justify-between items-center">
+            <label class="block leading-3">Les tags:</label>
+            <input
+              #tagInput
+              [(ngModel)]="autocompleteValue"
+              nbInput
+              placeholder="Choisir un tag..."
+              name="icon"
+              (input)="onTagChange()"
+              [nbAutocomplete]="tagAuto"
+              required
+              autocomplete="off"
+              (keydown.enter)="onEnterPressed($event)"
+            />
+          </div>
+          <nb-autocomplete
+            #tagAuto
+            (selectedChange)="onAutocompleteSelected($event)"
+          >
+            <nb-option
+              *ngFor="let option of filteredTags$ | async"
+              [value]="option"
+            >
+              <div class="flex gap-2">
+                <nb-icon [icon]="option"></nb-icon>
+                <span>{{ option }}</span>
+              </div>
+            </nb-option>
+          </nb-autocomplete>
+          <div>
+            <nb-tag-list (tagRemove)="onTagRemoved($event)">
+              <nb-tag
+                *ngFor="let tag of transaction.tags"
+                [text]="tag"
+                [removable]="true"
+              ></nb-tag>
+            </nb-tag-list>
+          </div>
+
+          <button
+            nbButton
+            status="primary"
+            class="mt-6"
+            (click)="addTransaction()"
+          >
+            Ajouter
+          </button>
+        </form>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

@@ -1,0 +1,71 @@
+<div>
+  <h1>Liste des catégories</h1>
+  <nb-card class="mt-2">
+    <nb-card-body>
+      <table [nbTreeGrid]="dataSource" [nbSort]="dataSource" class="mt-3">
+        <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allColumns"></tr>
+        <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: allColumns"></tr>
+
+        <ng-container
+          *ngFor="let column of columnsInfos"
+          [nbTreeGridColumnDef]="column.name"
+        >
+          <th
+            nbTreeGridHeaderCell
+            [nbSortHeader]="getSortDirection(column.name)"
+            *nbTreeGridHeaderCellDef
+          >
+            {{ column.label | titlecase }}
+          </th>
+          <td nbTreeGridCell *nbTreeGridCellDef="let row">
+            <div *ngIf="column.name === 'name'">
+              <span>
+                {{ row.data.name || "-" }}
+              </span>
+            </div>
+            <div *ngIf="column.name === 'icon'">
+              <div class="flex gap-2">
+                <svg-icon
+                  [key]="row.data.icon"
+                  size="xl"
+                  *ngIf="row.data.default"
+                ></svg-icon>
+                <nb-icon
+                  class="!w-6 !h-6"
+                  *ngIf="!row.data.default"
+                  [icon]="row.data.icon"
+                ></nb-icon>
+              </div>
+            </div>
+            <div *ngIf="column.name === 'default'">
+              <span>{{ row.data.default ? "Oui" : "Non" }}</span>
+            </div>
+            <div *ngIf="column.name === 'color'">
+              <span
+                class="inline-block rounded-full p-1 text-white font-bold uppercase"
+                [ngStyle]="{ 'background-color': row.data.color }"
+                >{{ row.data.color }}</span
+              >
+            </div>
+            <div *ngIf="column.name === 'action'">
+              <button nbButton (click)="openDeleteConfirmation(dialog, row.data.id)" size="small" status="danger" [disabled]="row.data.default">Supprimer</button>
+            </div>
+          </td>
+        </ng-container>
+      </table>
+      
+    </nb-card-body>
+  </nb-card>
+  <ng-template #dialog let-data let-ref="dialogRef">
+    <nb-card>
+      <nb-card-header>Confirmation de suppression</nb-card-header>
+      <nb-card-body>
+        {{ data.message }}
+      </nb-card-body>
+      <nb-card-footer>
+        <button nbButton (click)="confirmDeletion(data.id, ref)" status="success" class="mr-4">Confirmer</button>
+        <button nbButton (click)="ref.close()" status="danger">Annuler</button>
+      </nb-card-footer>
+    </nb-card>
+  </ng-template>
+</div>

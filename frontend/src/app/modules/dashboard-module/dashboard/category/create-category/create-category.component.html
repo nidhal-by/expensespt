@@ -1,0 +1,78 @@
+<div>
+  <h1>Ajouter une catégorie</h1>
+  <div class="max-w-xl">
+    <nb-card class="mt-2">
+      <nb-card-body>
+        <form>
+          <div class="flex gap-2 my-2 justify-between items-center">
+            <label>Nom de la catégorie: </label>
+            <input
+              [(ngModel)]="category.name"
+              nbInput
+              placeholder="Nom"
+              name="category-name"
+              required
+              autocomplete="off"
+            />
+          </div>
+
+          <div class="flex gap-2 my-2 justify-between items-center">
+            <label>Couleur associée: </label>
+            <input
+              [(ngModel)]="category.color"
+              type="color"
+              placeholder="Couleur (en hexadecimal)"
+              name="color"
+            />
+          </div>
+
+          <div class="flex gap-2 my-2 justify-between items-center">
+            <div>
+              <label class="block leading-3">Icône associée: </label>
+              <a
+                href="https://akveo.github.io/eva-icons/#/"
+                target="_blank"
+                class="!text-[10px]"
+                >Liste des icone disponibles</a
+              >
+            </div>
+            <input
+              #iconInput
+              [(ngModel)]="category.icon"
+              nbInput
+              placeholder="Nom d'icone"
+              name="icon"
+              (input)="onIconChange()"
+              [nbAutocomplete]="iconAuto"
+              required
+              autocomplete="off"
+            />
+          </div>
+          <nb-autocomplete
+            #iconAuto
+            (selectedChange)="onSelectionChange($event)"
+          >
+            <nb-option
+              *ngFor="let option of filteredIcons$ | async"
+              [value]="option"
+            >
+              <div class="flex gap-2">
+                <nb-icon [icon]="option"></nb-icon>
+                <span>{{ option }}</span>
+              </div>
+            </nb-option>
+          </nb-autocomplete>
+
+          <button
+            nbButton
+            status="primary"
+            class="mt-6"
+            (click)="addCategory()"
+          >
+            Ajouter
+          </button>
+        </form>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

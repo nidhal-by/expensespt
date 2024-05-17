@@ -1,0 +1,24 @@
+<div>
+  <h1>Mes Rapports</h1>
+  <nb-card class="mt-2">
+    <nb-card-body>
+      <div
+        echarts
+        [options]="chartOption"
+        [loading]="loading"
+        [loadingOpts]="{ text: 'Chargement' }"
+        *ngIf="transactions.length > 0"
+      ></div>
+      <br><br><br><br><br>
+      <div
+        echarts
+        [options]="categoryChartOptions"
+        [loading]="loading"
+        [loadingOpts]="{ text: 'Chargement' }"
+        *ngIf="transactions.length > 0"
+      ></div>
+
+      
+    </nb-card-body>
+  </nb-card>
+</div>

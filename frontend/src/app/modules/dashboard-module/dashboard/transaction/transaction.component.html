@@ -1,0 +1,64 @@
+<div>
+  <h1>Mes transactions</h1>
+  <nb-card class="mt-2">
+    <nb-card-body>
+      <div *ngIf="transactions.length > 0">
+        <div class="flex items-center justify-between">
+          <div>
+            <label class="search-label mr-2" for="search">Rechercher:</label>
+            <input
+              nbInput
+              [nbFilterInput]="dataSource"
+              id="search"
+              class="search-input"
+            />
+          </div>
+          <div>
+            <div class="flex gap-2 my-2 justify-between items-center">
+              <label> Filtrer par catégorie </label>
+              <nb-select
+                multiple
+                [(selected)]="selectedCategories"
+                hero
+                (selectedChange)="categoriesSelected($event)"
+              >
+                <nb-option
+                  *ngFor="let category of availableCategories"
+                  [value]="category.id"
+                >
+                  <div class="flex gap-2">
+                    <svg-icon
+                      *ngIf="category.default"
+                      class="rounded-full p-0.5"
+                      [ngStyle]="{ 'background-color': category.color }"
+                      [key]="category.icon"
+                      color="white"
+                      size="lg"
+                    ></svg-icon>
+                    <nb-icon
+                      *ngIf="!category.default"
+                      class="rounded-full p-0.5"
+                      [ngStyle]="{ 'background-color': category.color }"
+                      [icon]="category.icon"
+                      status="control"
+                    ></nb-icon>
+                    <span>{{ category.name }}</span>
+                  </div>
+                </nb-option>
+              </nb-select>
+            </div>
+          </div>
+        </div>
+        <app-transaction-table
+          [dataSource]="dataSource"
+          [allColumns]="allColumns"
+          [columnsInfos]="columnsInfos"
+        />
+      </div>
+      <p *ngIf="transactions.length === 0">
+        Aucune transaction pour le moment. Vous pouvez rajouter vos transaction
+        <a class="text-link" routerLink="../create">ici</a>
+      </p>
+    </nb-card-body>
+  </nb-card>
+</div>
